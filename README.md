@@ -16,34 +16,65 @@ To write a PYTHON program for socket for HTTP for web page upload and download
 6.Stop the program
 <BR>
 ## Program 
+SERVER.PY:
 ```
 import socket
-
-def download_file(host, port, filename):
-    req = f"GET /{filename} HTTP/1.1\r\nHost: {host}\r\nConnection: close\r\n\r\n"
-    
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((host, port))
-        s.sendall(req.encode())
-        response = b""
-        while (data := s.recv(4096)):
-            response += data
-
-    body = response.split(b"\r\n\r\n", 1)[1]
-    out = f"downloaded_{filename}"
-    with open(out, "wb") as f:
-        f.write(body)
-
-    print(f"Downloaded as {out}")
-
-if __name__ == "__main__":
-    download_file("127.0.0.1", 8080, "example.txt")
-
+s = socket.socket()
+s.bind(("localhost",8080))
+s.listen(1)
+print("Server running...")
+while True:
+    c,addr = s.accept()  
+    request = c.recv(1024).decode()
+    print("Request received")
+    if "GET" in request:
+        f = open("index.html","r")
+        data = f.read()
+        f.close()
+        response = "HTTP/1.1 200 OK\n\n" + data
+        c.send(response.encode())
+    elif "POST" in request:
+        data = request.split("\n\n")[1]
+        f = open("upload.txt","w")
+        f.write(data)
+        f.close()
+        c.send("HTTP/1.1 200 OK\n\nFile Uploaded".encode())
+    c.close()
 ```
-## OUTPUT
-<img width="818" height="320" alt="Screenshot 2026-02-19 104343" src="https://github.com/user-attachments/assets/1cc47f12-17d0-45fe-9b5c-73e9ef96916b" />
+CLIENT.PY:
+```
+import socket
+s = socket.socket()
+s.connect(("localhost",8080))
+ch = input("1.Download 2.Upload : ")
+if ch == "1":
+    req = "GET / HTTP/1.1\nHost: localhost\n\n"
+    s.send(req.encode())
+    data = s.recv(4096)
+    print(data.decode())
+else:
+    msg = input("Enter data to upload: ")
+    req = "POST / HTTP/1.1\nHost: localhost\n\n" + msg
+    s.send(req.encode())
+    data = s.recv(1024)
+    print(data.decode())
+s.close()
+```
+OUTPUT:
 
-<img width="778" height="332" alt="Screenshot 2026-02-19 104405" src="https://github.com/user-attachments/assets/622e493c-5e29-4983-bca5-56baff4dca22" />
+<img width="1110" height="352" alt="image" src="https://github.com/user-attachments/assets/f75173bd-aaf9-4053-9442-c0916e15286e" />
 
+<img width="1053" height="356" alt="image" src="https://github.com/user-attachments/assets/11c8ccb8-9286-4194-a635-8c261e5f2b17" />
+
+1.UPLOAD OUTPUT:
+
+<img width="1113" height="612" alt="image" src="https://github.com/user-attachments/assets/814d4c8b-7234-450e-a887-f1f2a838c387" />
+
+2.DOWNLOAD OUTPUT:
+
+
+
+
+  
 ## Result
 Thus the socket for HTTP for web page upload and download created and Executed
