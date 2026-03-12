@@ -68,9 +68,12 @@ OUTPUT:
 
 1.UPLOAD OUTPUT:
 
-<img width="1113" height="612" alt="image" src="https://github.com/user-attachments/assets/814d4c8b-7234-450e-a887-f1f2a838c387" />
+<img width="1113" height="612" alt="Screenshot 2026-03-12 095623" src="https://github.com/user-attachments/assets/86b4ae55-82c0-4014-bf1d-ff7b20a41c78" />
+
 
 2.DOWNLOAD OUTPUT:
+
+<img width="852" height="572" alt="image" src="https://github.com/user-attachments/assets/08d76bda-6e4c-49ca-8ce6-3f40867c879b" />
 
 
 
